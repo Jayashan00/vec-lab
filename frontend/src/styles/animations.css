@@ -1,0 +1,539 @@
+/* =========================================================
+   LearnHub — Animation & new-component styles
+   Import this AFTER styles/index.css so it can safely
+   layer on top of the existing design system variables.
+========================================================= */
+
+/* ---------- Animated Bot ---------- */
+
+.bot-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.bot-glow {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.55), transparent 70%);
+  filter: blur(18px);
+  z-index: 0;
+}
+
+.bot-float {
+  position: relative;
+  z-index: 2;
+  width: 78%;
+  height: 78%;
+  filter: drop-shadow(0 18px 30px rgba(31, 27, 75, 0.35));
+}
+
+.bot-shadow {
+  position: absolute;
+  bottom: 2%;
+  width: 46%;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.35), transparent 70%);
+  z-index: 1;
+}
+
+.bot-orbit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.bot-orbit-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
+}
+
+.bot-orbit-dot.dot-1 { top: 4%; left: 50%; }
+.bot-orbit-dot.dot-2 { bottom: 12%; left: 12%; }
+.bot-orbit-dot.dot-3 { bottom: 12%; right: 12%; }
+
+/* ---------- Navbar: scroll + mobile menu ---------- */
+
+.navbar.scrolled {
+  box-shadow: 0 8px 30px rgba(31, 27, 75, 0.08);
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.nav-underline {
+  position: relative;
+}
+
+.nav-underline::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.nav-underline:hover::after,
+.nav-underline.active::after {
+  transform: scaleX(1);
+}
+
+.nav-burger {
+  display: none;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 8px;
+  border-radius: 10px;
+}
+
+.nav-burger:hover {
+  background: var(--primary-soft);
+}
+
+.mobile-menu-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(320px, 84vw);
+  z-index: 200;
+  background: var(--surface);
+  box-shadow: -20px 0 60px rgba(20, 18, 55, 0.25);
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mobile-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  background: rgba(17, 17, 38, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.mobile-menu-panel a,
+.mobile-menu-panel button {
+  text-align: left;
+  padding: 13px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  color: var(--text-soft);
+  text-decoration: none;
+  border: 0;
+  background: transparent;
+  font-size: 0.98rem;
+}
+
+.mobile-menu-panel a:hover,
+.mobile-menu-panel button:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.mobile-menu-close {
+  align-self: flex-end;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 760px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-burger {
+    display: inline-flex;
+  }
+}
+
+/* ---------- Hero add-ons ---------- */
+
+.hero-bot-slot {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.hero-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.hero-mini-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #d9d6ff;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+/* ---------- Trending strip (real course data on Home) ---------- */
+
+.trending-strip {
+  margin-top: 30px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.trending-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ececff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 650;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.trending-chip:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.trending-chip-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  flex-shrink: 0;
+}
+
+/* ---------- Feature / "How it works" section ---------- */
+
+.section-block {
+  margin-top: 70px;
+}
+
+.section-heading {
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto 40px;
+}
+
+.section-kicker {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  font-size: 0.76rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.section-heading h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+  letter-spacing: -0.04em;
+}
+
+.section-heading p {
+  color: var(--muted);
+  margin: 0;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.feature-card {
+  padding: 28px 24px;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+.feature-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.08rem;
+}
+
+.feature-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+/* ---------- Category / image showcase ---------- */
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.category-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  isolation: isolate;
+  box-shadow: var(--shadow-sm);
+}
+
+.category-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.category-card:hover img {
+  transform: scale(1.08);
+}
+
+.category-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to top, rgba(15, 14, 35, 0.88), rgba(15, 14, 35, 0.05) 55%);
+}
+
+.category-label {
+  position: absolute;
+  z-index: 2;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  color: white;
+}
+
+.category-label strong {
+  display: block;
+  font-size: 1.02rem;
+  letter-spacing: -0.02em;
+}
+
+.category-label span {
+  font-size: 0.78rem;
+  color: #d7d5f5;
+}
+
+/* ---------- Testimonials marquee ---------- */
+
+.testimonial-viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.testimonial-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+
+.testimonial-viewport:hover .testimonial-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.testimonial-card {
+  width: 320px;
+  flex-shrink: 0;
+  padding: 22px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.testimonial-stars {
+  color: #f59e0b;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.testimonial-card p {
+  margin: 0 0 16px;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.testimonial-person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.testimonial-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimonial-person strong {
+  display: block;
+  font-size: 0.88rem;
+}
+
+.testimonial-person span {
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+/* ---------- CTA banner ---------- */
+
+.cta-banner {
+  margin-top: 70px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  padding: 50px 44px;
+  text-align: center;
+  color: white;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.4), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(99, 91, 255, 0.35), transparent 40%),
+    #111126;
+}
+
+.cta-banner h2 {
+  margin: 0 0 12px;
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  letter-spacing: -0.03em;
+}
+
+.cta-banner p {
+  margin: 0 auto 26px;
+  max-width: 520px;
+  color: #c6c4e6;
+}
+
+/* ---------- Chat-style AI advisor ---------- */
+
+.chat-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 26px;
+  align-items: start;
+}
+
+.chat-bot-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 6px;
+}
+
+.chat-bot-status {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.chat-bubble {
+  position: relative;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #f2f1ff;
+  border: 1px solid #e4e1ff;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+
+.typing-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.typing-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: typingBounce 1.1s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+
+@media (max-width: 760px) {
+  .chat-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-bot-panel {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

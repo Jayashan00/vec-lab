@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -14,46 +15,65 @@ import CourseForm from "./pages/CourseForm";
 import CourseStudents from "./pages/CourseStudents";
 import NotFound from "./pages/NotFound";
 
+const pageVariants = {
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -12 },
+};
+
 export default function App() {
+  const location = useLocation();
+
   return (
     <>
       <Navbar />
       <main className="container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.28, ease: "easeInOut" }}
+          >
+            <Routes location={location}>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
 
-          {/* Student-only routes */}
-          <Route path="/courses" element={
-            <ProtectedRoute role="student"><CourseList /></ProtectedRoute>
-          } />
-          <Route path="/courses/:id" element={
-            <ProtectedRoute role="student"><CourseDetail /></ProtectedRoute>
-          } />
-          <Route path="/my-enrollments" element={
-            <ProtectedRoute role="student"><MyEnrollments /></ProtectedRoute>
-          } />
-          <Route path="/recommendations" element={
-            <ProtectedRoute role="student"><Recommendations /></ProtectedRoute>
-          } />
+              {/* Student-only routes */}
+              <Route path="/courses" element={
+                <ProtectedRoute role="student"><CourseList /></ProtectedRoute>
+              } />
+              <Route path="/courses/:id" element={
+                <ProtectedRoute role="student"><CourseDetail /></ProtectedRoute>
+              } />
+              <Route path="/my-enrollments" element={
+                <ProtectedRoute role="student"><MyEnrollments /></ProtectedRoute>
+              } />
+              <Route path="/recommendations" element={
+                <ProtectedRoute role="student"><Recommendations /></ProtectedRoute>
+              } />
 
-          {/* Instructor-only routes */}
-          <Route path="/instructor/dashboard" element={
-            <ProtectedRoute role="instructor"><InstructorDashboard /></ProtectedRoute>
-          } />
-          <Route path="/instructor/courses/new" element={
-            <ProtectedRoute role="instructor"><CourseForm /></ProtectedRoute>
-          } />
-          <Route path="/instructor/courses/:id/edit" element={
-            <ProtectedRoute role="instructor"><CourseForm /></ProtectedRoute>
-          } />
-          <Route path="/instructor/courses/:id/students" element={
-            <ProtectedRoute role="instructor"><CourseStudents /></ProtectedRoute>
-          } />
+              {/* Instructor-only routes */}
+              <Route path="/instructor/dashboard" element={
+                <ProtectedRoute role="instructor"><InstructorDashboard /></ProtectedRoute>
+              } />
+              <Route path="/instructor/courses/new" element={
+                <ProtectedRoute role="instructor"><CourseForm /></ProtectedRoute>
+              } />
+              <Route path="/instructor/courses/:id/edit" element={
+                <ProtectedRoute role="instructor"><CourseForm /></ProtectedRoute>
+              } />
+              <Route path="/instructor/courses/:id/students" element={
+                <ProtectedRoute role="instructor"><CourseStudents /></ProtectedRoute>
+              } />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </motion.div>
+        </AnimatePresence>
       </main>
     </>
   );
