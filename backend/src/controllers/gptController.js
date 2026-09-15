@@ -55,19 +55,23 @@ const getRecommendations = asyncHandler(async (req, res) => {
   const userMessage = `Student goal: "${prompt}"\n\nCourse catalog:\n${courseCatalog}`;
 
   // Single, non-looped call to the GPT API.
-  const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [
-      { role: "system", content: systemInstruction },
-      { role: "user", content: userMessage },
+  const response = await openai.responses.create({
+    model: "gpt-5.6-luna",
+    input: [
+      {
+        role: "system",
+        content: systemInstruction,
+      },
+      {
+        role: "user",
+        content: userMessage,
+      },
     ],
-    temperature: 0.4,
-    max_tokens: 500,
   });
 
   recordRequest(prompt); // increment the persisted usage counter
 
-  const rawReply = completion.choices[0]?.message?.content || "{}";
+  const rawReply = response.output_text || "{}";
 
   let parsed;
   try {

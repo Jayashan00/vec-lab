@@ -2,6 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
 
+const prompts = [
+  "I want to become a software engineer.",
+  "I want to learn web development.",
+  "I want to start a career in data science.",
+];
+
 export default function Recommendations() {
   const [prompt, setPrompt] = useState("");
   const [results, setResults] = useState(null);
@@ -10,64 +16,163 @@ export default function Recommendations() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!prompt.trim()) return;
+
     setError("");
     setResults(null);
     setLoading(true);
+
     try {
-      const res = await api.post("/gpt/recommend", { prompt });
+      const res = await api.post("/gpt/recommend", {
+        prompt,
+      });
+
       setResults(res.data.data);
     } catch (err) {
-      setError(err.response?.data?.message || "Could not fetch recommendations right now");
+      setError(
+        err.response?.data?.message ||
+          "Could not fetch recommendations right now."
+      );
     } finally {
       setLoading(false);
     }
   };
 
+  const usePrompt = (value) => {
+    setPrompt(value);
+  };
+
   return (
-    <div>
-      <h2>Ask GPT for Course Recommendations</h2>
-      <p className="muted">
-        Tell us your goal, e.g. "I want to be a software engineer, what
-        courses should I follow?" and we'll suggest relevant courses from our
-        catalog.
-      </p>
+    <div className="page">
+      <div className="ai-shell">
+        <div className="ai-header">
+          <div className="ai-spark">
+            ✦ AI-powered learning advisor
+          </div>
 
-      <form className="prompt-form" onSubmit={handleSubmit}>
-        <textarea
-          rows={3}
-          placeholder="Describe your learning goal..."
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          required
-        />
-        <button className="btn-primary" type="submit" disabled={loading}>
-          {loading ? "Thinking..." : "Get Recommendations"}
-        </button>
-      </form>
+          <h1>
+            Tell us where you want to go.
+          </h1>
 
-      {error && <div className="alert alert-error">{error}</div>}
-
-      {results && results.length > 0 && (
-        <div className="grid">
-          {results.map((rec, idx) => (
-            <div className="card" key={idx}>
-              <h3>{rec.title}</h3>
-              <p className="muted">{rec.reason}</p>
-              {rec.courseId ? (
-                <Link to={`/courses/${rec.courseId}`} className="btn-secondary small">
-                  View Course
-                </Link>
-              ) : (
-                <span className="muted">Course not currently in catalog</span>
-              )}
-            </div>
-          ))}
+          <p>
+            Describe your career goal or what you want to
+            learn. Our AI advisor will find relevant courses
+            from the LearnHub catalog.
+          </p>
         </div>
-      )}
 
-      {results && results.length === 0 && (
-        <p className="muted">No matching recommendations were found. Try rephrasing your goal.</p>
-      )}
+        <div className="ai-body">
+          <form
+            className="prompt-form"
+            onSubmit={handleSubmit}
+          >
+            <textarea
+              rows={5}
+              placeholder="Example: I want to become a full-stack software engineer. What should I learn first?"
+              value={prompt}
+              onChange={(e) =>
+                setPrompt(e.target.value)
+              }
+              required
+            />
+
+            <div className="prompt-hints">
+              {prompts.map((item) => (
+                <button
+                  type="button"
+                  className="prompt-hint"
+                  key={item}
+                  onClick={() => usePrompt(item)}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            <button
+              className="btn-primary"
+              type="submit"
+              disabled={loading}
+            >
+              {loading
+                ? "✦ Finding your best matches..."
+                : "✦ Get My Recommendations"}
+            </button>
+          </form>
+
+          {error && (
+            <div className="alert alert-error">
+              {error}
+            </div>
+          )}
+
+          {results && results.length > 0 && (
+            <div style={{ marginTop: "35px" }}>
+              <div className="page-header">
+                <div>
+                  <div className="page-kicker">
+                    Personalized for you
+                  </div>
+
+                  <h2 className="page-title">
+                    Recommended courses
+                  </h2>
+                </div>
+              </div>
+
+              <div className="grid">
+                {results.map((rec, idx) => (
+                  <article
+                    className="card recommendation-card"
+                    key={idx}
+                  >
+                    <div className="recommendation-number">
+                      {idx + 1}
+                    </div>
+
+                    <h3>{rec.title}</h3>
+
+                    <p className="muted card-description">
+                      {rec.reason}
+                    </p>
+
+                    <div className="card-footer">
+                      {rec.courseId ? (
+                        <Link
+                          to={`/courses/${rec.courseId}`}
+                          className="btn-secondary small"
+                        >
+                          Explore Course →
+                        </Link>
+                      ) : (
+                        <span className="muted">
+                          Course not currently in catalog
+                        </span>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {results && results.length === 0 && (
+            <div className="empty-state" style={{ marginTop: "25px" }}>
+              <div className="empty-icon">✦</div>
+
+              <h3>
+                No matching courses found
+              </h3>
+
+              <p className="muted">
+                Try describing your goal with a little more
+                detail.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

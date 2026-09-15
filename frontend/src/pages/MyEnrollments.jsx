@@ -12,39 +12,102 @@ export default function MyEnrollments() {
     api
       .get("/enrollments/my")
       .then((res) => setEnrollments(res.data.data))
-      .catch((err) => setError(err.response?.data?.message || "Failed to load enrollments"))
+      .catch((err) =>
+        setError(
+          err.response?.data?.message ||
+            "Failed to load enrollments."
+        )
+      )
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="muted center">Loading your enrollments...</p>;
+  if (loading) {
+    return (
+      <div className="center">
+        <div className="spinner" />
+        <p className="muted">
+          Loading your learning...
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h2>My Enrolled Courses</h2>
-      {error && <div className="alert alert-error">{error}</div>}
+    <div className="page">
+      <div className="page-header">
+        <div>
+          <div className="page-kicker">
+            Your journey
+          </div>
 
-      {enrollments.length === 0 && (
-        <p className="muted">
-          You haven't enrolled in any courses yet. <Link to="/courses">Browse courses</Link>
-        </p>
+          <h1 className="page-title">
+            My Learning
+          </h1>
+
+          <p className="page-subtitle">
+            Courses you've enrolled in and your learning
+            progress.
+          </p>
+        </div>
+
+        <Link
+          to="/courses"
+          className="btn-primary"
+        >
+          Explore More →
+        </Link>
+      </div>
+
+      {error && (
+        <div className="alert alert-error">
+          {error}
+        </div>
       )}
 
-      <div className="grid">
-        {enrollments.map((enrollment) => (
-          <CourseCard
-            key={enrollment._id}
-            course={enrollment.course}
-            footer={
-              <div className="card-actions">
-                <Link to={`/courses/${enrollment.course._id}`} className="btn-secondary small">
-                  View Details
-                </Link>
-                <span className={`status-pill ${enrollment.status}`}>{enrollment.status}</span>
-              </div>
-            }
-          />
-        ))}
-      </div>
+      {enrollments.length === 0 ? (
+        <div className="empty-state">
+          <div className="empty-icon">📖</div>
+
+          <h3>Your learning library is empty</h3>
+
+          <p className="muted">
+            Find a course and start learning today.
+          </p>
+
+          <Link
+            to="/courses"
+            className="btn-primary"
+            style={{ marginTop: "12px" }}
+          >
+            Browse Courses
+          </Link>
+        </div>
+      ) : (
+        <div className="grid">
+          {enrollments.map((enrollment) => (
+            <CourseCard
+              key={enrollment._id}
+              course={enrollment.course}
+              footer={
+                <div className="card-actions">
+                  <Link
+                    to={`/courses/${enrollment.course._id}`}
+                    className="btn-secondary small"
+                  >
+                    Continue →
+                  </Link>
+
+                  <span
+                    className={`status-pill ${enrollment.status}`}
+                  >
+                    {enrollment.status}
+                  </span>
+                </div>
+              }
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
