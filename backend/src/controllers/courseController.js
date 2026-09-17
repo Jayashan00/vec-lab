@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Course = require("../models/Course");
 const Enrollment = require("../models/Enrollment");
+const { extractYoutubeId } = require("../utils/youtube");
 
 // @desc    Create a new course
 // @route   POST /api/courses
@@ -134,6 +135,125 @@ const getEnrolledStudents = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, count: enrollments.length, data: enrollments });
 });
 
+// @desc    Add a lecture (YouTube link) to a course
+// @route   POST /api/courses/:id/lessons
+// @access  Private (instructor only, owner)
+const addLesson = asyncHandler(async (req, res) => {
+  const course = await Course.findById(req.params.id);
+
+  if (!course) {
+    res.status(404);
+    throw new Error("Course not found");
+  }
+
+  if (course.instructor.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error("You can only add lessons to courses you created");
+  }
+
+  const { title, description, youtubeUrl } = req.body;
+
+  if (!title || !youtubeUrl) {
+    res.status(400);
+    throw new Error("Lesson title and YouTube URL are required");
+  }
+
+  const youtubeVideoId = extractYoutubeId(youtubeUrl);
+  if (!youtubeVideoId) {
+    res.status(400);
+    throw new Error("That doesn't look like a valid YouTube URL");
+  }
+
+  course.lessons.push({
+    title,
+    description,
+    youtubeUrl,
+    youtubeVideoId,
+    order: course.lessons.length,
+  });
+
+  await course.save();
+
+  res.status(201).json({ success: true, data: course });
+});
+
+// @desc    Update a lesson's details
+// @route   PUT /api/courses/:id/lessons/:lessonId
+// @access  Private (instructor only, owner)
+const updateLesson = asyncHandler(async (req, res) => {
+  const course = await Course.findById(req.params.id);
+
+  if (!course) {
+    res.status(404);
+    throw new Error("Course not found");
+  }
+
+  if (course.instructor.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error("You can only edit lessons on courses you created");
+  }
+
+  const lesson = course.lessons.id(req.params.lessonId);
+  if (!lesson) {
+    res.status(404);
+    throw new Error("Lesson not found");
+  }
+
+  const { title, description, youtubeUrl } = req.body;
+
+  if (youtubeUrl && youtubeUrl !== lesson.youtubeUrl) {
+    const youtubeVideoId = extractYoutubeId(youtubeUrl);
+    if (!youtubeVideoId) {
+      res.status(400);
+      throw new Error("That doesn't look like a valid YouTube URL");
+    }
+    lesson.youtubeUrl = youtubeUrl;
+    lesson.youtubeVideoId = youtubeVideoId;
+  }
+
+  lesson.title = title ?? lesson.title;
+  lesson.description = description ?? lesson.description;
+
+  await course.save();
+
+  res.status(200).json({ success: true, data: course });
+});
+
+// @desc    Delete a lesson from a course
+// @route   DELETE /api/courses/:id/lessons/:lessonId
+// @access  Private (instructor only, owner)
+const deleteLesson = asyncHandler(async (req, res) => {
+  const course = await Course.findById(req.params.id);
+
+  if (!course) {
+    res.status(404);
+    throw new Error("Course not found");
+  }
+
+  if (course.instructor.toString() !== req.user._id.toString()) {
+    res.status(403);
+    throw new Error("You can only delete lessons on courses you created");
+  }
+
+  const lesson = course.lessons.id(req.params.lessonId);
+  if (!lesson) {
+    res.status(404);
+    throw new Error("Lesson not found");
+  }
+
+  lesson.deleteOne();
+  await course.save();
+
+  // Clean up: also remove this lesson's id from every student's completed
+  // list so progress percentages don't silently include a deleted lesson.
+  await Enrollment.updateMany(
+    { course: course._id },
+    { $pull: { completedLessons: req.params.lessonId } }
+  );
+
+  res.status(200).json({ success: true, data: course });
+});
+
 module.exports = {
   createCourse,
   getCourses,
@@ -142,4 +262,7 @@ module.exports = {
   updateCourse,
   deleteCourse,
   getEnrolledStudents,
+  addLesson,
+  updateLesson,
+  deleteLesson,
 };

@@ -84,28 +84,57 @@ export default function MyEnrollments() {
         </div>
       ) : (
         <div className="grid">
-          {enrollments.map((enrollment) => (
-            <CourseCard
-              key={enrollment._id}
-              course={enrollment.course}
-              footer={
-                <div className="card-actions">
-                  <Link
-                    to={`/courses/${enrollment.course._id}`}
-                    className="btn-secondary small"
-                  >
-                    Continue →
-                  </Link>
+          {enrollments.map((enrollment) => {
+            const totalLessons = enrollment.course?.lessons?.length || 0;
+            const doneLessons = enrollment.completedLessons?.length || 0;
+            const percent =
+              totalLessons > 0
+                ? Math.round((doneLessons / totalLessons) * 100)
+                : 0;
 
-                  <span
-                    className={`status-pill ${enrollment.status}`}
-                  >
-                    {enrollment.status}
-                  </span>
-                </div>
-              }
-            />
-          ))}
+            return (
+              <CourseCard
+                key={enrollment._id}
+                course={enrollment.course}
+                footer={
+                  <div className="card-actions" style={{ flexDirection: "column", alignItems: "stretch", gap: "10px" }}>
+                    {totalLessons > 0 && (
+                      <div>
+                        <div className="learn-progress-track small">
+                          <div
+                            className="learn-progress-fill"
+                            style={{ width: `${percent}%` }}
+                          />
+                        </div>
+                        <span className="muted" style={{ fontSize: "0.78rem" }}>
+                          {doneLessons}/{totalLessons} lessons · {percent}%
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="card-actions">
+                      <Link
+                        to={
+                          totalLessons > 0
+                            ? `/courses/${enrollment.course._id}/learn`
+                            : `/courses/${enrollment.course._id}`
+                        }
+                        className="btn-secondary small"
+                      >
+                        Continue →
+                      </Link>
+
+                      <span
+                        className={`status-pill ${enrollment.status}`}
+                      >
+                        {enrollment.status}
+                      </span>
+                    </div>
+                  </div>
+                }
+              />
+            );
+          })}
         </div>
       )}
     </div>

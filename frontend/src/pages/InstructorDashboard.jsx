@@ -181,6 +181,13 @@ export default function InstructorDashboard() {
 
                   <td className="actions-cell">
                     <Link
+                      to={`/instructor/courses/${course._id}/lessons`}
+                      className="btn-secondary small"
+                    >
+                      Lessons
+                    </Link>
+
+                    <Link
                       to={`/instructor/courses/${course._id}/edit`}
                       className="btn-secondary small"
                     >

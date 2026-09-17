@@ -8,10 +8,12 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CourseList from "./pages/CourseList";
 import CourseDetail from "./pages/CourseDetail";
+import CourseLearn from "./pages/CourseLearn";
 import MyEnrollments from "./pages/MyEnrollments";
 import Recommendations from "./pages/Recommendations";
 import InstructorDashboard from "./pages/InstructorDashboard";
 import CourseForm from "./pages/CourseForm";
+import ManageLessons from "./pages/ManageLessons";
 import CourseStudents from "./pages/CourseStudents";
 import NotFound from "./pages/NotFound";
 
@@ -49,6 +51,9 @@ export default function App() {
               <Route path="/courses/:id" element={
                 <ProtectedRoute role="student"><CourseDetail /></ProtectedRoute>
               } />
+              <Route path="/courses/:id/learn" element={
+                <ProtectedRoute role="student"><CourseLearn /></ProtectedRoute>
+              } />
               <Route path="/my-enrollments" element={
                 <ProtectedRoute role="student"><MyEnrollments /></ProtectedRoute>
               } />
@@ -65,6 +70,9 @@ export default function App() {
               } />
               <Route path="/instructor/courses/:id/edit" element={
                 <ProtectedRoute role="instructor"><CourseForm /></ProtectedRoute>
+              } />
+              <Route path="/instructor/courses/:id/lessons" element={
+                <ProtectedRoute role="instructor"><ManageLessons /></ProtectedRoute>
               } />
               <Route path="/instructor/courses/:id/students" element={
                 <ProtectedRoute role="instructor"><CourseStudents /></ProtectedRoute>

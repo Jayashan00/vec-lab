@@ -126,6 +126,13 @@ export default function CourseDetail() {
           <p className="content-block">
             {course.content}
           </p>
+
+          {course.lessons?.length > 0 && (
+            <p className="muted" style={{ marginTop: "10px" }}>
+              🎬 {course.lessons.length} video{" "}
+              {course.lessons.length === 1 ? "lesson" : "lessons"} included
+            </p>
+          )}
         </section>
 
         {message && (
@@ -142,9 +149,19 @@ export default function CourseDetail() {
 
         <div style={{ marginTop: "28px" }}>
           {isEnrolled ? (
-            <span className="status-pill enrolled">
-              ✓ You're enrolled in this course
-            </span>
+            <div className="detail-actions">
+              <span className="status-pill enrolled">
+                ✓ You're enrolled in this course
+              </span>
+              <Link
+                to={`/courses/${id}/learn`}
+                className="btn-primary"
+              >
+                {course.lessons?.length > 0
+                  ? "Start Learning →"
+                  : "Open Learning Path →"}
+              </Link>
+            </div>
           ) : (
             <button
               className="btn-primary"

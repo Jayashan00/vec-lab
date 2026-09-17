@@ -19,6 +19,13 @@ const enrollmentSchema = new mongoose.Schema(
       enum: ["active", "completed"],
       default: "active",
     },
+    // IDs of the lesson subdocuments (within the course) this student has
+    // marked as watched/complete. Stored here rather than on the Course
+    // itself since completion is per-student, not per-course.
+    completedLessons: {
+      type: [mongoose.Schema.Types.ObjectId],
+      default: [],
+    },
   },
   { timestamps: true }
 );

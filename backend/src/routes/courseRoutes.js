@@ -7,6 +7,9 @@ const {
   updateCourse,
   deleteCourse,
   getEnrolledStudents,
+  addLesson,
+  updateLesson,
+  deleteLesson,
 } = require("../controllers/courseController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 
@@ -27,5 +30,10 @@ router.route("/:id")
   .delete(authorize("instructor"), deleteCourse);
 
 router.get("/:id/students", authorize("instructor"), getEnrolledStudents);
+
+// Lecture materials (YouTube lessons) — instructor manages, owner only.
+router.post("/:id/lessons", authorize("instructor"), addLesson);
+router.put("/:id/lessons/:lessonId", authorize("instructor"), updateLesson);
+router.delete("/:id/lessons/:lessonId", authorize("instructor"), deleteLesson);
 
 module.exports = router;

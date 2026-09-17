@@ -1,0 +1,326 @@
+/* =========================================================
+   LearnHub — Lessons, video player, and progress bar styles
+   Import this LAST, after theme-classic.css.
+========================================================= */
+
+/* ---------- Shared progress bar (used on MyEnrollments + Learn page) ---------- */
+
+.learn-progress-track {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.learn-progress-track.small {
+  height: 5px;
+  margin-bottom: 4px;
+}
+
+.learn-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+
+.learn-progress-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  font-weight: 700;
+  font-size: 0.85rem;
+  height: fit-content;
+}
+
+.detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Instructor: Manage Lessons page ---------- */
+
+.lesson-manage-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 28px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+.lesson-form {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  position: sticky;
+  top: 90px;
+}
+
+.lesson-form h3 {
+  margin: 0 0 18px;
+  font-size: 1.1rem;
+}
+
+.lesson-form .form-field {
+  margin-bottom: 16px;
+}
+
+.lesson-form .form-actions {
+  margin-top: 6px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.lesson-thumb-preview {
+  margin: -6px 0 16px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.lesson-thumb-preview img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.lesson-thumb-preview span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: var(--surface-soft);
+}
+
+.lesson-list-panel h3 {
+  margin: 0 0 16px;
+  font-size: 1.05rem;
+}
+
+.lesson-manage-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lesson-manage-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.lesson-drag-handle {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.lesson-manage-thumb {
+  width: 84px;
+  height: 47px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.lesson-manage-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lesson-manage-info strong {
+  font-size: 0.92rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lesson-manage-info span {
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lesson-manage-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.icon-btn.danger:hover {
+  background: #fdecec;
+  color: var(--danger, #dc2626);
+}
+
+/* ---------- Student: Learning page (video player + lesson list) ---------- */
+
+.learn-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 28px;
+  margin-top: 20px;
+  align-items: start;
+}
+
+.learn-player {
+  min-width: 0;
+}
+
+.learn-video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 20px 50px rgba(31, 58, 95, 0.15);
+}
+
+.learn-video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.learn-video-meta {
+  margin-top: 18px;
+}
+
+.learn-video-meta h2 {
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+}
+
+.learn-video-meta p {
+  margin: 0 0 18px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.learn-lesson-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 640px;
+  overflow-y: auto;
+}
+
+.learn-lesson-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.learn-lesson-item:hover {
+  border-color: var(--accent);
+}
+
+.learn-lesson-item.active {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.learn-lesson-check {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.check-done {
+  color: var(--accent);
+}
+
+.check-todo {
+  color: var(--border);
+}
+
+.learn-lesson-thumb {
+  width: 64px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+.learn-lesson-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.learn-lesson-info strong {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.learn-lesson-playing {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+@media (max-width: 980px) {
+  .lesson-manage-layout,
+  .learn-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .lesson-form {
+    position: static;
+  }
+}
