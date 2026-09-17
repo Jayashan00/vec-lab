@@ -17,6 +17,9 @@ const readUsage = () => {
 };
 
 const writeUsage = (usage) => {
+  // Create the data/ folder if it doesn't exist yet (e.g. a fresh clone on
+  // a new server, since generated runtime data isn't committed to git).
+  fs.mkdirSync(path.dirname(USAGE_FILE), { recursive: true });
   fs.writeFileSync(USAGE_FILE, JSON.stringify(usage, null, 2));
 };
 
